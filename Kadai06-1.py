@@ -1,25 +1,23 @@
-# エンドポイント: getStatsData（https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_1）
-# 機能: 統計表データ取得。ここでは「家計調査」データを取得する。
-# 使用にはアカウント作成・APIキー発行が必要: https://www.e-stat.go.jp/api/api-info/
+# e-Stat APIを使って「家計調査（家計収支編）」の統計データを取得するプログラム
+# データセット: statsDataId='0003003309'（二人以上の世帯・家計収支編）
 
 import requests
 import json
 
-API_KEY = "YOUR_API_KEY"
-URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getStatsData"
+API_KEY = '2742a864c28868cc67c6c153a81f3cdd88886f1e'
+stats_data_id = '0003003309'
 
+url = 'https://api.e-stat.go.jp/rest/3.0/app/json/getStatsList'
 params = {
-    "appId": API_KEY,
-    "statsDataId": "0003217753",  # 家計調査
-    "lang": "J",
-    "metaGetFlg": "N",
-    "cntGetFlg": "N",
-    "explanationGetFlg": "N",
-    "sectionHeaderFlg": "1"
+    'appId': API_KEY,
+    'searchWord': '家計調査',
+    'limit': 10
 }
 
-response = requests.get(URL, params=params)
-data = response.json()
+response = requests.get(url, params=params)
 
-print(json.dumps(data, indent=2, ensure_ascii=False))
-
+if response.status_code == 200:
+    data = response.json()
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+else:
+    print("データ取得に失敗しました")
